@@ -41,7 +41,7 @@
             document.getElementById("chapter-title").textContent = chapter.name;
 
             document.getElementById("add-fiche-btn").onclick = async () => {
-                const name = prompt("Nom de la fiche (un seul mot): Il est possible que la fenêtre de téléchargment ne s'ouvre pas après avoir cliqué sur le bouton. N'hésitez à réessayer plusieurs fois.");
+                const name = prompt("Nom de la fiche (un seul mot): Il est possible que la fenêtre de téléchargment ne s'ouvre pas après que avez cliqué sur le bouton. N'hésitez à réessayer plusieurs fois sans accents ni espaces.");
                 if (!name) return;
 
                 const input = document.createElement("input");
@@ -54,7 +54,7 @@
 
                     const uploaded = await uploadFicheToStorage(chapter.id, file);
                     if (uploaded.error) {
-                        alert("Erreur lors de l’upload. Veillez à ce que le nom du fichier que vous voulez importez (et non pas de la fiche) soit composé d’un seul mot, sans espaces ni caractères spéciaux.");
+                        alert("Erreur lors de l’upload. Veillez à ce que le nom du fichier que vous voulez importez (et non pas de la fiche) soit composé d’un seul mot, sans espaces ni caractères spéciaux, ni accents.");
                         return;
                     }
 
