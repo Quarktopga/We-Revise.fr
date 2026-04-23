@@ -333,7 +333,6 @@ textarea:focus {
     position: sticky;
     top: 0;
     z-index: 1000;
-
     height: var(--header-height);
     background: white;
     border-bottom: 1px solid var(--border);
@@ -344,6 +343,7 @@ textarea:focus {
     box-shadow: var(--shadow);
 }
 
+/* Partie gauche */
 .wr-header .left {
     display: flex;
     align-items: center;
@@ -353,6 +353,7 @@ textarea:focus {
 .wr-header img.logo {
     height: 150px;
     cursor: pointer;
+    transition: height 0.3s ease;
 }
 
 .wr-header h1 {
@@ -365,18 +366,98 @@ textarea:focus {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: 1px;
+    transition: font-size 0.3s ease;
 }
 
+/* Liens de navigation */
 .wr-header nav a {
     margin-left: 20px;
     text-decoration: none;
-    color: var(--primary); /* bleu du site */
+    color: var(--primary);
     font-weight: 700;
     font-size: 16px;
 }
 
 .wr-header nav a:hover {
     text-decoration: underline;
+}
+
+/* Burger */
+.burger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 26px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.burger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background: #0057ff;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Animation burger actif */
+.burger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+.burger.active span:nth-child(2) {
+    opacity: 0;
+}
+.burger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .wr-header img.logo {
+        height: 100px;
+    }
+    .wr-header h1 {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 700px) {
+    .wr-header img.logo {
+        height: 80px;
+    }
+    .wr-header h1 {
+        font-size: 28px;
+    }
+
+    .burger {
+        display: flex;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: var(--header-height);
+        right: 0;
+        background: white;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        padding: 15px 25px;
+        box-shadow: var(--shadow);
+        display: none;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .nav-links a {
+        margin: 10px 0;
+        font-size: 18px;
+    }
 }
 
 /* FOOTER */
