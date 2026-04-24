@@ -200,7 +200,7 @@ function getResponse(rawQuery) {
 
     // ASK
     if (includesAny(q, ["ask"])) {
-        understood = true;
+    
         return {
             text: pick([
             "✦ASK est l’assistant interne de We Revise. Il fonctionne uniquement avec des mots-clés et ne fait aucune requête externe.",
@@ -216,7 +216,7 @@ function getResponse(rawQuery) {
     /* Fonctionnement global */
 
     if (includesAny(q, ["fonctionne", "marche", "utiliser", "usage"])) {
-        understood = true;
+    
         return {
             text: pick([
             "We Revise est une plateforme de révision collaborative sans compte. Tu choisis une matière, tu ajoutes des chapitres et des fiches, et tout est stocké dans Supabase.",
@@ -230,7 +230,7 @@ function getResponse(rawQuery) {
     }
         // Informations générales sur We Revise
     if (includesAny(q, ["we revise", "plateforme", "site", "projet", "but", "objectif", "presentation", "présentation"])) {
-        understood = true;
+
         return {
             text: pick([
             "We Revise est une plateforme de révision collaborative pensée pour les élèves. Elle permet d’ajouter des chapitres et des fiches dans chaque matière, sans compte et avec une interface simple.",
@@ -244,7 +244,7 @@ function getResponse(rawQuery) {
     }
 
     if (includesAny(q, ["supabase", "stockage", "base", "donnees", "sql"])) {
-        understood = true;
+
         return {
             text: pick([
             "We Revise utilise Supabase : la base SQL stocke les matières, chapitres et fiches, et Supabase Storage héberge les fichiers.",
@@ -258,7 +258,6 @@ function getResponse(rawQuery) {
     }
 
     /* Réponse par défaut */
-    understood = false;
     return {
         text: pick([
         "Je n’ai pas compris ta question. Tu peux me demander des informations sur : les matières, les chapitres, les fiches, l’import, le feedback ou l’entraînement.",
