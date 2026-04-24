@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const result = getResponse(q);  // ← maintenant un objet { text, understood }
 
     // Enregistrement Supabase (non bloquant)
-    saveAskQuery(q, result.understood).catch(err => console.error(err));
+    saveAskQuery(q, result.understood, result.category).catch(err => console.error(err));
 
     // Effet d’écriture premium
     typeWriter(result.text);
@@ -40,10 +40,10 @@ document.addEventListener("DOMContentLoaded", () => {
    Enregistrement Supabase : table ask_logs
    ============================================================ */
 
-async function saveAskQuery(question, understood) {
+async function saveAskQuery(question, understood, category) {
     return await client
         .from("ask_logs")
-        .insert([{ question, understood }]);
+        .insert([{ question, understood, category }]);
 }
 
    /* ========================================================
@@ -66,7 +66,8 @@ const synonyms = {
     feedback: ["feedback", "avis", "message", "commentaire", "retour"],
     entrainement: ["entrainement", "entrainements", "quiz", "exercice", "exercices", "questions"],
     matiere: ["matiere", "matieres", "discipline", "cours"],
-    ask: ["ask", "assistant", "bot", "ia", "aide"]
+    ask: ["ask", "assistant", "bot", "ia", "aide"],
+    bonjour: ["bonjour", "salut", "coucou", "hello", "hi", "hey"]
 };
 function includesAny(text, keywords) {
     for (const k of keywords) {
@@ -105,11 +106,12 @@ function getResponse(rawQuery) {
             "Pour mettre une fiche en ligne, rends-toi dans un chapitre et utilise « Importer une fiche ». Choisis ton document, donne-lui un nom, et il sera immédiatement disponible pour tous.",
             "L’import d’une fiche est rapide : ouvre un chapitre, clique sur « Importer une fiche », sélectionne ton fichier et valide. Le document sera automatiquement enregistré dans Supabase Storage."
         ]),
-        understood: true
+        understood: true,
+        category: "fiche-import"
     };
 }
     // Ajouter un chapitre
-    if (includesAny(q, ["ajouter", "creer", "créer"]) &&
+    if (includesAny(q, ["ajouter", "creer", "créer", "mettre"]) &&
         includesAny(q, ["chapitre"])) {
         return {
             text: pick([
@@ -119,7 +121,8 @@ function getResponse(rawQuery) {
                 "Pour ajouter un chapitre, ouvre une matière et utilise « + Contribuer ». Entre un nom clair, laisse regulateur.js vérifier, et ton chapitre sera créé en quelques secondes.",
                 "Créer un chapitre est simple : choisis une matière, clique sur « + Contribuer », propose un nom, et regulateur.js s’assure qu’il est correct avant de l’ajouter."
             ]),
-            understood: true
+            understood: true,
+            category: "chapitre-creation"
         };
         }    
 
@@ -136,7 +139,8 @@ function getResponse(rawQuery) {
             "Toutes les matières du collège sont présentes sur We Revise : Français, Histoire, Géographie, EMC, Maths, SPC, Technologie, SVT, Allemand, Espagnol, Anglais, Musique et Latin. Elles évoluent grâce aux contributions des élèves.",
             "We Revise couvre l’ensemble des matières du collège, de Français à Latin. Chaque matière accueille des chapitres et fiches ajoutés librement par les utilisateurs."
         ]),
-            understood: true
+            understood: true,
+        category: "matiere"
         };
     }
 
@@ -150,7 +154,8 @@ function getResponse(rawQuery) {
             "Un chapitre sert de dossier dans une matière : il regroupe les fiches et est enregistré automatiquement dans la base Supabase.",
             "Les chapitres permettent d’organiser les contenus d’une matière. Ils sont créés par les utilisateurs et stockés dans la base Supabase."
         ]),
-            understood: true
+            understood: true,
+        category: "chapitre"
         };
     }
 
@@ -164,7 +169,8 @@ function getResponse(rawQuery) {
             "Une fiche est simplement un document que tu ajoutes dans un chapitre. Il est ensuite stocké dans Supabase Storage pour être consulté facilement.",
             "Les fiches sont des documents importés par les utilisateurs dans les chapitres. Elles sont hébergées dans Supabase Storage pour un accès rapide."
         ]),
-            understood: true
+            understood: true,
+        category: "fiche"
         };
     }
 
@@ -178,7 +184,8 @@ function getResponse(rawQuery) {
             "Le Feedback te permet de partager une remarque courte. L’équipe peut les consulter, mais rien ne l’oblige à répondre ou à agir dessus.",
             "Tu peux envoyer une suggestion via le Feedback. C’est anonyme, limité à 300 caractères, et l’équipe peut choisir de le lire ou non."
         ]),
-            understood: true
+            understood: true,
+        category: "feedback"
         };
         
     }
@@ -194,7 +201,8 @@ function getResponse(rawQuery) {
             "L’Entraînement te permet de t’exercer à partir des contenus ajoutés sur We Revise. De nouveaux types d’activités arriveront avec le temps.",
             "La page Entraînement propose des activités basées sur les fiches et chapitres. Elle continuera de s’améliorer au fil des mises à jour."
         ]),
-            understood: true
+            understood: true,
+        category: "entrainement"
         };
     }
 
@@ -209,7 +217,8 @@ function getResponse(rawQuery) {
             "✦ASK n’est pas une IA complète : il analyse juste quelques mots-clés pour t’aider à comprendre We Revise.",
             "✦ASK est un petit assistant intégré à We Revise. Il ne fait que reconnaître des mots-clés pour te guider dans la plateforme."
         ]),
-            understood: true
+            understood: true,
+        category: "ask"
         };
     }
 
@@ -225,7 +234,8 @@ function getResponse(rawQuery) {
             "We Revise est pensé pour être simple : tu ajoutes des contenus et Supabase s’occupe de tout enregistrer automatiquement.",
             "Le site fonctionne sans inscription : tu contribues librement, et Supabase assure la sauvegarde des données."
         ]),
-            understood: true
+            understood: true,
+        category: "fonctionnement"
         };
     }
         // Informations générales sur We Revise
@@ -239,7 +249,8 @@ function getResponse(rawQuery) {
             "We Revise est une plateforme conçue pour faciliter la révision : tu choisis une matière, tu ajoutes des chapitres et des fiches, et tout le monde peut en profiter. Le site repose sur la contribution collective.",
             "We Revise est un espace de révision participatif. Il permet de structurer les matières en chapitres et d’y importer des fiches, le tout sans inscription et avec un fonctionnement volontairement minimaliste."
         ]),
-            understood: true
+            understood: true,
+        category: "plateforme"
         };
     }
 
@@ -253,10 +264,24 @@ function getResponse(rawQuery) {
             "Supabase est utilisé pour organiser les données : la base SQL gère les textes, et Storage conserve les fichiers.",
             "We Revise s’appuie sur Supabase pour stocker les informations et héberger les fichiers importés par les utilisateurs."
         ]),
-            understood: true
+            understood: true,
+        category: "supabase"
         };
     }
-
+    // Bonjour
+    if (includesAny(q, ["bonjour"])) {
+        return {
+            text: pick([
+            "Bonjour ! Je suis ASK, l’assistant de We Revise. Dis‑moi ce dont tu as besoin et je t’oriente immédiatement.",
+            "Salut ! Ici ASK, ton assistant sur We Revise. Tu cherches une fiche, un chapitre ou une information précise ? Je suis là pour t’aider.",
+            "Hello ! Je suis ASK, l’assistant intégré de We Revise. Pose ta question et je te guide vers la bonne ressource.",
+            "Bonjour ! ASK à ton service. We Revise met à disposition toutes les fiches et chapitres dont tu as besoin : comment puis‑je t’aider aujourd’hui.",
+            "Salut ! Bienvenue sur We Revise. Je suis ASK, ton assistant dédié. Indique‑moi ta demande et je te réponds."   
+        ]),
+            understood: true,
+        category: "bonjour"
+        };
+    }
     /* Réponse par défaut */
     return {
         text: pick([
@@ -266,7 +291,8 @@ function getResponse(rawQuery) {
         "Je ne vois pas encore comment répondre à ça. Essaie de me parler des matières, des chapitres, des fiches ou du feedback.",
         "Je n’ai pas d’information pour cette question. Tu peux m’interroger sur le fonctionnement de We Revise ou ses différentes pages."
     ]),
-        understood: false
+        understood: false,
+        category: "unknown"
     };
 }
 
