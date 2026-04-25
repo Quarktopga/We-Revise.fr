@@ -139,6 +139,21 @@ h2 {
     border-radius: 50px;
     box-shadow: 0 3px 8px rgba(0,0,0,0.18);
 }
+.brevet-info {
+    margin-top: 22px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-light);
+}
+
+.countdown {
+    margin-top: 6px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+}
 /* ============================
    LISTE DES CHAPITRES
 ============================ */
