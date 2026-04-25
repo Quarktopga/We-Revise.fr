@@ -44,7 +44,7 @@ async function loadSubjects() {
 
         subjectsGrid.appendChild(card);
     });
-
+}
 /* ============================================================
    3. Fonctions : Chargement des chapitres
    ============================================================ */
