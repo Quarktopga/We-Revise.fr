@@ -242,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ============================
 
 function startCountdown() {
-    const targetDate = new Date("2026-04-29T00:00:00");
+    const targetDate = new Date("2026-04-29T10:00:00");
 
     function updateCountdown() {
         const now = new Date();
