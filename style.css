@@ -118,6 +118,27 @@ h2 {
     border-radius: 50px;
     box-shadow: 0 3px 8px rgba(0,0,0,0.18);
 }
+/* Matières "brevet-sci" mises en valeur */
+.subject-card.brevet-sci {
+    position: relative;
+    background: linear-gradient(135deg, #00c27a15, #00e08a15);
+    border-color: #00c27a; /* vert scientifique premium */
+}
+
+/* Badge "SCI" */
+.subject-card.brevet-sci::after {
+    content: "SCIENCE";
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #00c27a;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 50px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+}
 /* ============================
    LISTE DES CHAPITRES
 ============================ */
