@@ -237,3 +237,32 @@ document.addEventListener("DOMContentLoaded", () => {
         loadFiches(chapter.id);
     }
 });
+// ============================
+// COMPTE À REBOURS BREVET 2026
+// ============================
+
+function startCountdown() {
+    const targetDate = new Date("2026-04-29T00:00:00");
+
+    function updateCountdown() {
+        const now = new Date();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+            document.getElementById("countdown").textContent =
+                "Annonce des matières scientifiques aujourd’hui !";
+            return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+
+        document.getElementById("countdown").textContent =
+            `Plus que ${days} jours ${hours} heures`;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000 * 60 * 10); // mise à jour toutes les 10 min
+}
+
+document.addEventListener("DOMContentLoaded", startCountdown);
