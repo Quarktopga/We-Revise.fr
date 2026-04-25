@@ -1,42 +1,55 @@
-// ===============================
-//  ANALYTICS.JS — We Revise
-//  Détection : page, appareil, durée
-//  Fonctionne automatiquement sur TOUTES les pages
-// ===============================
-
-// --- Détection de la page actuelle ---
-const page = location.pathname.split("/").pop().replace(".html", "") || "index";
-
-// --- Détection de l'appareil ---
-function getDevice() {
+// ---------------------------------------------
+// 📱 DÉTECTION APPAREIL
+// ---------------------------------------------
+function detectDevice() {
     const ua = navigator.userAgent.toLowerCase();
     if (/mobile|iphone|android/.test(ua)) return "mobile";
     if (/tablet|ipad/.test(ua)) return "tablet";
     return "desktop";
 }
 
-const device = getDevice();
+const device = detectDevice();
 
-// --- Timer pour mesurer le temps passé sur la page ---
+// ---------------------------------------------
+// 📄 DÉTECTION PAGE
+// ---------------------------------------------
+const page = location.pathname.replace("/", "") || "index";
+
+// ---------------------------------------------
+// ⏱️ TIMER
+// ---------------------------------------------
 let startTime = Date.now();
 
-// --- Fonction d'envoi à Supabase ---
-function sendAnalytics(extra = {}) {
-    // Sécurité : attendre que Supabase soit chargé
-    if (!window.client) return;
-
-    client.from("site_analytics").insert([{
-        page,
+// ---------------------------------------------
+// 📤 LOG À L’ARRIVÉE (via Supabase-js)
+// ---------------------------------------------
+if (typeof client !== "undefined") {
+    client.from("visites").insert({
         device,
-        ...extra
-    }]);
+        page,
+        usage: "USER"
+    });
+} else {
+    console.error("Supabase client non trouvé : vérifie supabase.js");
 }
 
-// --- Envoi immédiat à l'arrivée sur la page ---
-sendAnalytics();
+// ---------------------------------------------
+// 📤 LOG À LA SORTIE (durée via sendBeacon)
+// ---------------------------------------------
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+        const duration = Math.round((Date.now() - startTime) / 1000);
 
-// --- Envoi du temps passé au moment de quitter la page ---
-window.addEventListener("beforeunload", () => {
-    const duration = Math.round((Date.now() - startTime) / 1000);
-    sendAnalytics({ duration });
+        const payload = {
+            device,
+            page,
+            duration_seconds: duration,
+            usage: "USER"
+        };
+
+        navigator.sendBeacon(
+            "https://jaedzrrkdtglnltvbded.supabase.co/rest/v1/visites",
+            JSON.stringify(payload)
+        );
+    }
 });
