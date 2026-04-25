@@ -34,7 +34,11 @@ async function loadSubjects() {
 
     data.forEach(subject => {
         const card = document.createElement("div");
-        card.className = "subject-card" + (subject.class === "brevet" ? " brevet" : "");
+        card.className =
+        "subject-card"
+        + (subject.class === "brevet" ? " brevet" : "")
+        + (subject.class === "brevet-sci" ? " brevet-sci" : "");
+
         card.textContent = subject.name;
 
         card.onclick = () => {
