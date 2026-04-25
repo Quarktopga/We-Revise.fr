@@ -33,18 +33,20 @@ async function loadSubjects() {
     subjectsGrid.innerHTML = "";
 
     data.forEach(subject => {
-        const card = document.createElement("div");
-        card.className = "subject-card" + (subject.class === "brevet" ? " brevet" : "");
-        card.textContent = subject.name;
+    const card = document.createElement("div");
 
-        card.onclick = () => {
-            localStorage.setItem("currentSubject", JSON.stringify(subject));
-            location.href = "chapters.html";
-        };
+    card.className = "subject-card"
+        + (subject.class === "brevet" ? " brevet" : "")
+        + (subject.class === "brevet-sci" ? " brevet-sci" : "");
 
-        subjectsGrid.appendChild(card);
-    });
-}
+    card.textContent = subject.name;
+
+    card.onclick = () => {
+        location.href = "chapters.html";
+    };
+
+    subjectsGrid.appendChild(card);
+});
 
 /* ============================================================
    3. Fonctions : Chargement des chapitres
