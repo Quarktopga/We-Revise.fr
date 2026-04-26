@@ -1,3 +1,5 @@
+console.log("[Analytics] Script chargé");
+
 // ---------------------------------------------
 // 📱 DÉTECTION APPAREIL
 // ---------------------------------------------
@@ -9,49 +11,50 @@ function detectDevice() {
 }
 
 const device = detectDevice();
+console.log("[Analytics] Device =", device);
 
 // ---------------------------------------------
 // 📄 DÉTECTION PAGE
 // ---------------------------------------------
 const page = location.pathname.replace("/", "") || "index";
+console.log("[Analytics] Page =", page);
 
 // ---------------------------------------------
 // ⏱️ TIMER
 // ---------------------------------------------
 let startTime = Date.now();
+console.log("[Analytics] Timer démarré à", startTime);
 
 // ---------------------------------------------
-// 📤 LOG À L’ARRIVÉE (via Supabase-js)
+// 📤 LOG À L’ARRIVÉE
 // ---------------------------------------------
-if (typeof client !== "undefined") {
-    client.from("visites").insert({
-        device,
-        page,
-        usage: "USER"
-    }).select().then(({ error }) => {
-        if (error) console.error("Erreur insert arrivée :", error);
-    });
-} else {
-    console.error("Supabase client non trouvé : vérifie supabase.js");
-}
+client.from("visites").insert({
+    device,
+    page,
+    usage: "USER"
+}).select().then(({ error }) => {
+    if (error) console.error("[Analytics] Erreur insert arrivée :", error);
+    else console.log("[Analytics] Arrivée enregistrée");
+});
 
 // ---------------------------------------------
-// 📤 LOG À LA SORTIE (durée via sendBeacon)
+// 📤 LOG À LA SORTIE
 // ---------------------------------------------
 document.addEventListener("visibilitychange", () => {
+    console.log("[Analytics] visibilitychange =", document.visibilityState);
+
     if (document.visibilityState === "hidden") {
         const duration = Math.round((Date.now() - startTime) / 1000);
+        console.log("[Analytics] Durée =", duration, "secondes");
 
-        const payload = {
+        client.from("visites").insert({
             device,
             page,
             duration_seconds: duration,
             usage: "USER"
-        };
-
-        navigator.sendBeacon(
-            "https://jaedzrrkdtglnltvbded.supabase.co/rest/v1/visites",
-            JSON.stringify(payload)
-        );
+        }).select().then(({ error }) => {
+            if (error) console.error("[Analytics] Erreur insert sortie :", error);
+            else console.log("[Analytics] Sortie enregistrée");
+        });
     }
 });
