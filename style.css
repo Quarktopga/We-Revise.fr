@@ -69,6 +69,13 @@ h2 {
 /* ============================
    GRILLE DES MATIÈRES
 ============================ */
+.intro {
+    margin: 10px 0 25px;
+    font-size: 15px;
+    color: var(--text-light);
+    text-align: center;
+    line-height: 1.45;
+}
 
 .subjects-grid {
     display: grid;
