@@ -28,6 +28,8 @@ if (typeof client !== "undefined") {
         device,
         page,
         usage: "USER"
+    }).select().then(({ error }) => {
+        if (error) console.error("Erreur insert arrivée :", error);
     });
 } else {
     console.error("Supabase client non trouvé : vérifie supabase.js");
