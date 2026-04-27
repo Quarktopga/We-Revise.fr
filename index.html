@@ -15,6 +15,49 @@
 
     <div class="page-container">
         <main>
+            <div class="new-version-alert" style="
+    background: #fff;
+    border: 2px solid #4A90E2;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    animation: fadeIn 0.6s ease-out;
+">
+    <h3 style="
+        margin: 0 0 10px;
+        font-size: 1.3rem;
+        color: #2c3e50;
+    ">🎉 Nouvelle version disponible</h3>
+
+    <p style="
+        margin: 0 0 15px;
+        font-size: 1rem;
+        color: #555;
+    ">Une version améliorée de We Revise est maintenant en ligne.</p>
+
+    <a href="https://quarktopga.github.io/werevise/" style="
+        display: inline-block;
+        background: #4A90E2;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.2s ease;
+    " onmouseover="this.style.background='#357ABD'" onmouseout="this.style.background='#4A90E2'">
+        Découvrir la nouvelle version
+    </a>
+</div>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+
             <p class="intro">We Revise est une plateforme collaborative où les élèves importent et partagent leurs fiches de révision — gratuitement et sans créer de compte.</p>
             <h2>Choisis ta matière</h2>
             <div id="subjects-list" class="subjects-grid"></div>
